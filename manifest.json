@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDesc__",
+  "version": "0.1.1",
+	"container" : "GOOGLE_DRIVE",
+	"api_console_project_id" : "1230779730",
+  "content_security_policy": "default-src 'self'; img-src 'self' data:",
+  "default_locale": "en",
+  "offline_enabled": true,  
+  "icons": {
+      "128": "images/mirror-128.png",
+			"19": "images/mirror-19.png",
+			"16": "images/mirror-16.png"
+  },
+  "web_accessible_resources": [],
+	"app": {
+		"launch": {
+			"local_path": "launch.html"
+		}
+	},
+	"permissions": [
+		"http://quimian.com/", "clipboardRead", "clipboardWrite"
+	],
+	"content_scripts": [{
+		"matches": ["http://quimian.com/drivecode/*"],
+		"js": ["redirector.js"],
+		"run_at": "document_start"
+	}]
+}

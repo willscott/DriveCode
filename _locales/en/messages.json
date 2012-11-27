@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "DriveCode",
+    "description": "Extension name."
+  },
+  "extDesc": {
+    "message": "Self Relient Text Editing for Drive.",
+    "description": "Extension description."
+  }
+}
