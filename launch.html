@@ -3,6 +3,53 @@
   <head>
     <title>Drive Code</title>
     <script type="text/javascript" src="launch.js"></script>
-    <link rel="stylesheet" href="CodeMirror/lib/codemirror.css">
+    <link rel="stylesheet" href="CodeMirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="drivecode.css" />
+    <link rel="stylesheet" href="CodeMirror/theme/neat.css">
+    <link rel="stylesheet" href="CodeMirror/theme/elegant.css">
+    <link rel="stylesheet" href="CodeMirror/theme/erlang-dark.css">
+    <link rel="stylesheet" href="CodeMirror/theme/night.css">
+    <link rel="stylesheet" href="CodeMirror/theme/monokai.css">
+    <link rel="stylesheet" href="CodeMirror/theme/cobalt.css">
+    <link rel="stylesheet" href="CodeMirror/theme/eclipse.css">
+    <link rel="stylesheet" href="CodeMirror/theme/rubyblue.css">
+    <link rel="stylesheet" href="CodeMirror/theme/lesser-dark.css">
+    <link rel="stylesheet" href="CodeMirror/theme/xq-dark.css">
+    <link rel="stylesheet" href="CodeMirror/theme/ambiance.css">
+    <link rel="stylesheet" href="CodeMirror/theme/blackboard.css">
+    <link rel="stylesheet" href="CodeMirror/theme/vibrant-ink.css">
+    <link rel="stylesheet" href="CodeMirror/theme/twilight.css">
   </head>
+  <body>
+    <h1>Loading...</h1>
+    <div id='editor'>
+    </div>
+    <div id='status'>
+      <span id='info'>Line: 1 Column: 1</span>
+      <span>
+        <select id='mode'>
+        </select>
+      </span>
+      <span id='saved'>Unsaved</span>
+      <span>
+        <select id='theme'>
+            <option selected>default</option>
+            <option>ambiance</option>
+            <option>blackboard</option>
+            <option>cobalt</option>
+            <option>eclipse</option>
+            <option>elegant</option>
+            <option>erlang-dark</option>
+            <option>lesser-dark</option>
+            <option>monokai</option>
+            <option>neat</option>
+            <option>night</option>
+            <option>rubyblue</option>
+            <option>twilight</option>
+            <option>vibrant-ink</option>
+            <option>xq-dark</option>
+        </select>
+      </span>
+    </div>
+  </body>
 </html>
