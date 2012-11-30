@@ -15,7 +15,7 @@ cp -R _locales DriveCode
 
 # Code Mirror
 mkdir DriveCode/CodeMirror
-cp -R CodeMirror/lib CodeMirror/mode CodeMirror/keymap DriveCode/CodeMirror/
+cp -R CodeMirror/lib CodeMirror/mode CodeMirror/keymap CodeMirror/theme DriveCode/CodeMirror/
 
 zip -0 -r DriveCode.zip DriveCode DriveCode/*
 rm -r DriveCode

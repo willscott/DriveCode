@@ -140,7 +140,7 @@ function setupSave() {
 
 function updateSave() {
 	var el = document.getElementById("sdot");
-	if (editor.getValue() != data || dirty) {
+	if ((editor.getValue() != data) || dirty) {
 		el.className = "unsaved";
 	} else {
 		el.className = "";
@@ -233,12 +233,14 @@ function openGoogleChannel() {
 			updateTitle(activeMetaData.title);
 			data = editor.getValue();
 			dirty = false;
+			updateSave();
 		} else if (event.data.name == "data") {
 			if (editor) {
 				editor.setValue(event.data.data);
 			}
 			data = editor.getValue();
 			dirty = false;
+			updateSave()
 		}
 	});
 	
