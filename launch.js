@@ -4,13 +4,16 @@ var editor = null;
 var activeMetaData = {
 	mime: "text/plain"
 };
+var data = "";
+var dirty = false;
 
 window.addEventListener('load', function() {
 	var continuation = function() {
 		var el = document.getElementById("editor");
 		editor = CodeMirror(el, {
 			lineNumbers: true,
-			onCursorActivity: updateStatus
+			onCursorActivity: updateStatus,
+			onChange: updateSave
 		});
 		
 		// Hook up the theme.
@@ -18,7 +21,9 @@ window.addEventListener('load', function() {
 		// Hook up the mode.
 		setupMode();
 		// Hook up saved status.
-		
+		setupSave();
+		// Hook up title.
+		setupTitle();
 	};
 
 	if (window.location.search.length) {
@@ -65,7 +70,7 @@ var mode_ext_map = {
 "haxe": ["hx"],
 "htmlembedded": ["jsp", "cs"],
 "htmlmixed": ["html"],
-"javascript": ["js"],
+"javascript": ["js", "json"],
 "jinja2": [],
 "less": ["less"],
 "lua": ["lua"],
@@ -114,18 +119,32 @@ function setupMode() {
 		}
 		select.addEventListener('change', function() {
 			var newVal = select.options[select.selectedIndex].innerHTML;
-			CodeMirror.autoLoadMode(editor, newVal);
-			editor.setOption("mode", newVal);
+			updateMode(newVal);
 		}, true);
 	}, true);
 	document.body.appendChild(mode);
 }
 
-function updateStatus(editor) {
-	var coords = editor.cursorCoords(true, "page");
-	var pos = editor.coordsChar(coords);
-	var string = "Line: " + (pos.line + 1) + " Column: " + (pos.ch + 1);
-	document.getElementById('info').innerText = string;
+function updateMode(newMode) {
+	if (editor) {
+		CodeMirror.autoLoadMode(editor, newMode);
+		editor.setOption("mode", newMode);	
+	}
+	var el = document.getElementById("mode");
+	el.value = newMode;
+}
+
+function setupSave() {
+	document.getElementById("sdot").addEventListener('click', editorSave, true);
+}
+
+function updateSave() {
+	var el = document.getElementById("sdot");
+	if (editor.getValue() != data || dirty) {
+		el.className = "unsaved";
+	} else {
+		el.className = "";
+	}
 }
 
 function editorSave() {
@@ -135,6 +154,42 @@ function editorSave() {
 		meta: activeMetaData,
 		file: editor.getValue()
 	}, ORIGIN);
+}
+
+function setupTitle() {
+	var title = document.getElementsByTagName("h1")[0];
+	title.addEventListener('click', function() {
+		var newTitle = prompt("Input Title", title.innerText);
+		if (newTitle && newTitle != title.innerText) {
+			dirty = true;
+			activeMetaData.title = newTitle;
+			updateTitle(newTitle);
+			updateSave();
+		}
+	}, true);
+}
+
+function updateTitle(newTitle) {
+	window.title = newTitle;
+	document.getElementsByTagName("h1")[0].innerText = newTitle;
+	if (newTitle.indexOf(".") != -1) {
+		var parts = newTitle.split(".");
+		var ext = parts[parts.length - 1];
+		for (var mode in mode_ext_map) {
+			for (var i = 0; i < mode_ext_map[mode].length; i++) {
+				if (mode_ext_map[mode][i] == ext) {
+					updateMode(mode);
+				}
+			}
+		}
+	}
+}
+
+function updateStatus(editor) {
+	var coords = editor.cursorCoords(true, "page");
+	var pos = editor.coordsChar(coords);
+	var string = "Line: " + (pos.line + 1) + " Column: " + (pos.ch + 1);
+	document.getElementById('info').innerText = string;
 }
 
 function loadCodeMirror(continuation) {
@@ -164,7 +219,7 @@ function openGoogleChannel() {
 				if (editor) {
 					editor.setOption("readonly", false);
 				}
-				document.getElementsByTagName("h1")[0].innerText = "untitled.txt";
+				updateTitle("untitled.txt");
 				if (initialState.action == "create") {
 					activeMetaData.title = "untitled.txt";
 					activeMetaData.parents = [initialState.parentId];
@@ -175,11 +230,15 @@ function openGoogleChannel() {
 			if (editor) {
 				editor.setOption("readonly", !activeMetaData.editable);
 			}
-			document.getElementsByTagName("h1")[0].innerText = activeMetaData.title;
+			updateTitle(activeMetaData.title);
+			data = editor.getValue();
+			dirty = false;
 		} else if (event.data.name == "data") {
 			if (editor) {
 				editor.setValue(event.data.data);
 			}
+			data = editor.getValue();
+			dirty = false;
 		}
 	});
 	

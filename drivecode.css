@@ -13,6 +13,7 @@ h1 {
 	margin: 0;
 	padding-bottom: 0.5em;
 	margin-left: 1em;
+	height: 30px;
 }
 
 #editor {
@@ -54,4 +55,16 @@ h1 {
 	-webkit-appearance: none;
 	background: transparent;
 	border: none;
+}
+
+#sdot {
+	width:10px;
+	height:10px;
+	border-radius: 10px;
+	border: 1px solid #ccc;
+	margin-bottom:4px;
+}
+
+.unsaved {
+	background: #ccc;
 }
