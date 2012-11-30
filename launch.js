@@ -201,7 +201,7 @@ function loadCodeMirror(continuation) {
 
 function loadGoogleChannel() {
 	var el = document.createElement("iframe");
-	el.src = "https://homes.cs.washington.edu/~wrs/drivecode.html";
+	el.src = "https://homes.cs.washington.edu/~wrs/drivecode/api.html";
 	el.style.position = "absolute";
 	el.style.left = "-100px";
 	el.style.width = "10px";
