@@ -48,9 +48,11 @@ function setupTheme() {
 		el.addEventListener('change', function() {
 			var newVal = theme.options[theme.selectedIndex].innerHTML;
 			editor.setOption("theme", newVal);
+			document.getElementById("header").className = "cm-s-" + newVal;
 			chrome.storage.sync.set({"theme":newVal}, function() {});
 		}, true);
 		editor.setOption("theme", val);
+		document.getElementById("header").className = "cm-s-" + val;
 	});
 }
 

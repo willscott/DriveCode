@@ -8,17 +8,25 @@ body {
 	height: 100%;
 }
 
-h1 {
-	font-family: monospace;
-	margin: 0;
-	padding-bottom: 0.5em;
-	margin-left: 1em;
+#header {
+	position: fixed;
 	height: 30px;
+	z-index: 12;
+	width: 100%;
+	padding-left: 2em;
+}
+
+h1#title {
+	text-align: left;
+	font-family: monospace;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.5em;
 }
 
 #editor {
-	height: -webkit-calc(100% - 43px - 20px);
-	padding-bottom: 20px;
+	height: 100%;
 }
 
 .CodeMirror {
@@ -26,7 +34,8 @@ h1 {
 }
 
 .CodeMirror-scroll {
-	height: 100%;
+	height: -webkit-calc(100% - 50px);
+	margin-top: 30px;
 }
 
 #status {
