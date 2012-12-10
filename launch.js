@@ -6,6 +6,7 @@ var activeMetaData = {
 };
 var data = "";
 var dirty = false;
+var autosave = false;
 
 window.addEventListener('load', function() {
 	var continuation = function() {
@@ -138,6 +139,18 @@ function updateMode(newMode) {
 
 function setupSave() {
 	document.getElementById("sdot").addEventListener('click', editorSave, true);
+	chrome.storage.sync.get("autosave", function(r) {
+		var el = document.getElementById("autosave");
+		var val = r["autosave"] || false;
+		autosave = val;
+		if (val) {
+			el.checked = true;
+		}
+		el.addEventListener('change', function() {
+			autosave = el.checked;
+			chrome.storage.sync.set({"autosave":el.checked}, function() {});
+		}, true);
+	});
 }
 
 function updateSave() {
