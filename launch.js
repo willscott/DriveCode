@@ -7,6 +7,7 @@ var activeMetaData = {
 var data = "";
 var dirty = false;
 var autosave = false;
+var autosaveTimeout = false
 
 window.addEventListener('load', function() {
 	var continuation = function() {
@@ -160,6 +161,16 @@ function updateSave() {
 	} else {
 		el.className = "";
 	}
+	// Set a timeout for autosave
+	if (autosaveTimeout) {
+		window.clearTimeout(autosaveTimeout);
+	}
+	autosaveTimeout = window.setTimeout(doAutosave, 500);
+}
+
+function doAutosave() {
+	if (!autosave || !dirty) return;
+	editorSave();
 }
 
 function editorSave() {
