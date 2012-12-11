@@ -58,6 +58,13 @@ function setupTheme() {
 	});
 }
 
+var mode_alias_map = {
+	"clike": ["C / C++ / Java"],
+	"htmlmixed": ["HTML"],
+	"htmlembedded": ["JSP / C#"],
+	"stex": ["TeX"]
+};
+
 var mode_ext_map = {
 "clike": ["c", "cpp", "h", "hpp", "c++", "java", "m", "cs", "scala"],
 "clojure": ["clj"],
@@ -119,10 +126,17 @@ function setupMode() {
 	mode.addEventListener('load', function() {
 		var select = document.getElementById("mode");
 		for (var type in mode_ext_map) {
-			select.add(new Option(type, type));
+			if (type in mode_alias_map) {
+				var aliases = mode_alias_map[type];
+				for(var i = 0; i < aliases.length; i++) {
+					select.add(new Option(aliases[i], type));
+				}
+			} else {
+				select.add(new Option(type, type));
+			}
 		}
 		select.addEventListener('change', function() {
-			var newVal = select.options[select.selectedIndex].innerHTML;
+			var newVal = select.options[select.selectedIndex].value;
 			updateMode(newVal);
 		}, true);
 	}, true);
