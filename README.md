@@ -14,4 +14,5 @@ A [CodeMirror](http://codemirror.net) text editor UI for Google Drive.
 
 2. Keymaps
 3. Title editing is ugly
-4. Within browser, rather than as separate App window.
+4. Tab preferences (# spaces, soft tabs)
+5. Localization
