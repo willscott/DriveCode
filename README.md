@@ -2,17 +2,24 @@
 
 A [CodeMirror](http://codemirror.net) text editor UI for Google Drive.
 
+## Connect
+
+DriveCode is available for installation on the [Chrome Web Store](https://chrome.google.com/webstore/detail/drivecode/cafaeenamnaaddgainjldnlhikikobpd).
+Feel free to file Issues (or Pull Requests!) here, or interact with DriveCode on [Google+](https://plus.google.com/b/100255334116155747183/).
+
 ## To Do
 
-1. Remove URL Limitations.
+1. Overcome URL Restrictions.
 
-   The extension currently uses static web pages with a cache manifest, since the Drive API is unwilling to direct
-   to a chrome extension directly.  Hopefully a work-around can be found.
+   The extension currently uses a static web page with cache manifest to interact with drive, since the Google APIs are unwilling to
+   interact with a chrome extension directly.
+   
+   Bugs:
+   https://code.google.com/p/google-api-javascript-client/issues/detail?id=64
+   https://plus.google.com/111745366298188139351/posts/HZVJavKywFX
 
-   Similarly, a web page is used for communication with google, so that requests has a domain associated with them,
-   This limitation should also be removed.
-
-2. Keymaps
-3. Title editing is ugly
+2. Keymaps.
+3. Title editing is ugly.
 4. Tab preferences (# spaces, soft tabs)
 5. Localization
+6. Onboarding Experience
