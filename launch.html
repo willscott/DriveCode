@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Drive Code</title>
+    <script src="i18n_template2.js"></script>
     <script type="text/javascript" src="launch.js"></script>
     <link rel="stylesheet" href="CodeMirror/lib/codemirror.css" />
     <link rel="stylesheet" href="drivecode.css" />
@@ -23,7 +24,7 @@
   <body>
     <div id="header">
       <span class="cm-property">
-        <h1 id="title">Loading...</h1>
+        <h1 id="title" i18n-content="loadingMsg">Loading...</h1>
       </span>
     </div>
     <div id='editor'>
@@ -40,7 +41,7 @@
           <div id='sdot' title="Save"></div>
           <span>
             <input type='checkbox' id='autosave' />
-            <label for='autosave'>
+            <label for='autosave' i18n-content="autosave">
               Autosave
             </label>
           </span>

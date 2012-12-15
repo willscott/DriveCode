@@ -6,5 +6,17 @@
   "extDesc": {
     "message": "Self Relient Text Editing for Drive.",
     "description": "Extension description."
-  }
+	},
+	"loadingMsg": {
+		"message": "Loading...",
+		"description": "Initial document title while document is fetched from google."
+	},
+	"defaultTitle": {
+		"message": "Untitled.txt",
+		"description": "Initial document name for creation."
+	},
+	"autosave": {
+		"message": "Autosave",
+		"description": "checkbox for configuring whether documents are automaticallhy saved."
+	}
 }
