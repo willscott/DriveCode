@@ -19,7 +19,6 @@ Feel free to file Issues (or Pull Requests!) here, or interact with DriveCode on
    https://plus.google.com/111745366298188139351/posts/HZVJavKywFX
 
 2. Keymaps.
-3. Title editing is ugly.
-5. Localization.
-6. Onboarding Experience.
-7. Unsaved Changes Warning.
+3. Localization.
+4. Onboarding Experience.
+5. Unsaved Changes Warning.

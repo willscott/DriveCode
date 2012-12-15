@@ -16,13 +16,16 @@ body {
 	padding-left: 2em;
 }
 
-h1#title {
+#title {
 	text-align: left;
 	font-family: monospace;
 	font-weight: normal;
+	font-size: 23px;
 	margin: 0;
 	padding: 0;
-	padding-bottom: 0.5em;
+	padding-bottom: 7px;
+	-webkit-appearance: none;
+	border: 0;
 }
 
 #editor {

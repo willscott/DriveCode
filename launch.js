@@ -210,13 +210,12 @@ function editorSave() {
 }
 
 function setupTitle() {
-	var title = document.getElementsByTagName("h1")[0];
-	title.addEventListener('click', function() {
-		var newTitle = prompt("Input Title", title.innerText);
-		if (newTitle && newTitle != title.innerText) {
+	var title = document.getElementById("title");
+	title.addEventListener('change', function() {
+		if (title.value != activeMetaData.title) {
 			dirty = true;
-			activeMetaData.title = newTitle;
-			updateTitle(newTitle);
+			activeMetaData.title = title.value;
+			updateTitle(title.value);
 			updateSave();
 		}
 	}, true);
@@ -224,7 +223,7 @@ function setupTitle() {
 
 function updateTitle(newTitle) {
 	window.title = newTitle;
-	document.getElementsByTagName("h1")[0].innerText = newTitle;
+	var title = document.getElementById("title").value = newTitle;
 	if (newTitle.indexOf(".") != -1) {
 		var parts = newTitle.split(".");
 		var ext = parts[parts.length - 1];
