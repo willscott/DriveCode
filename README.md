@@ -20,6 +20,6 @@ Feel free to file Issues (or Pull Requests!) here, or interact with DriveCode on
 
 2. Keymaps.
 3. Title editing is ugly.
-4. Tab preferences (# spaces, soft tabs)
-5. Localization
-6. Onboarding Experience
+5. Localization.
+6. Onboarding Experience.
+7. Unsaved Changes Warning.

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "__MSG_extName__",
   "description": "__MSG_extDesc__",
-  "version": "0.2.3",
+  "version": "0.2.4",
 	"container" : "GOOGLE_DRIVE",
 	"api_console_project_id" : "1230779730",
   "content_security_policy": "default-src 'self'; img-src 'self' data:; frame-src 'self' https://homes.cs.washington.edu",
