@@ -43,7 +43,8 @@ window.addEventListener('load', function() {
 }, true);
 
 function setupTheme() {
-	var tVal = chrome.storage.sync.get("theme", function(r) {
+	var tVal = chrome.storage.sync.get(["theme", "tabs"], function(r) {
+		//Theme
 		var el = document.getElementById("theme");
 		var val = r["theme"] || "default";
 		el.value = val;
@@ -55,6 +56,18 @@ function setupTheme() {
 		}, true);
 		editor.setOption("theme", val);
 		document.getElementById("header").className = "cm-s-" + val;
+		
+		//tab settings
+		var tabel = document.getElementById("tabs");
+		var val = r["tabs"] || "t4";
+		tabel.value = val;
+		tabel.addEventListener('change', function() {
+			chrome.storage.sync.set({"theme": tabel.value}, function() {});
+			editor.setOption("tabSize", parseInt(tabel.value.split('')[1]));
+			editor.setOption("indentWithTabs", (tabel.value.split('')[0] == 't'));
+		});
+		editor.setOption("tabSize", parseInt(tabel.value.split('')[1]));
+		editor.setOption("indentWithTabs", (tabel.value.split('')[0] == 't'));
 	});
 }
 
