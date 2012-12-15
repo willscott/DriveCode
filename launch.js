@@ -179,6 +179,14 @@ function setupSave() {
 			chrome.storage.sync.set({"autosave":el.checked}, function() {});
 		}, true);
 	});
+
+  // Unsaved warning.
+	window.addEventListener('beforeunload', function(e) {
+		if ((editor.getValue() != data) || dirty) {
+			confirm("Document has unsaved changes.");
+			return false;
+		}
+	}, true);
 }
 
 function updateSave() {

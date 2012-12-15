@@ -21,4 +21,3 @@ Feel free to file Issues (or Pull Requests!) here, or interact with DriveCode on
 2. Keymaps.
 3. Localization.
 4. Onboarding Experience.
-5. Unsaved Changes Warning.
