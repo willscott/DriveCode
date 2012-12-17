@@ -5,27 +5,25 @@
   "version": "0.2.4",
 	"container" : "GOOGLE_DRIVE",
 	"api_console_project_id" : "1230779730",
-  "content_security_policy": "default-src 'self'; img-src 'self' data:; frame-src 'self' https://homes.cs.washington.edu",
   "default_locale": "en",
-	"offline_enabled": false,
   "icons": {
       "128": "images/mirror-128.png",
 			"19": "images/mirror-19.png",
 			"16": "images/mirror-16.png"
   },
-  "web_accessible_resources": [],
 	"app": {
-		"launch": {
-			"local_path": "launch.html"
+		"background": {
+			"scripts": [
+				"background.js"
+			]
 		}
 	},
 	"permissions": [
 		"https://homes.cs.washington.edu/",
-		"storage"
+		"storage",
+		"webview"
 	],
-	"content_scripts": [{
-		"matches": ["https://homes.cs.washington.edu/~wrs/drivecode/*"],
-		"js": ["redirector.js"],
-		"run_at": "document_start"
-	}]
+	"sandbox": {
+	  "pages": ["unsafe.html"]
+	}
 }

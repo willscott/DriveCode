@@ -1,4 +1,3 @@
-var ORIGIN = "https://homes.cs.washington.edu";
 var initialState = {};
 var editor = null;
 var activeMetaData = {
@@ -214,7 +213,7 @@ function editorSave() {
 		command: "save",
 		meta: activeMetaData,
 		file: editor.getValue()
-	}, ORIGIN);
+	}, '*');
 }
 
 function setupTitle() {
@@ -261,7 +260,7 @@ function loadCodeMirror(continuation) {
 
 function loadGoogleChannel() {
 	var el = document.createElement("iframe");
-	el.src = "https://homes.cs.washington.edu/~wrs/drivecode/api.html";
+	el.src = "unsafe.html";
 	el.style.position = "absolute";
 	el.style.left = "-100px";
 	el.style.width = "10px";
@@ -274,7 +273,7 @@ function openGoogleChannel() {
 	window.addEventListener('message', function(event) {
 		if (event.data.name == "ready") {
 			if (initialState.action && initialState.action == "open") {
-				window.googleChannel.postMessage({command: "open", id:initialState.ids[0]}, ORIGIN);
+				window.googleChannel.postMessage({command: "open", id:initialState.ids[0]}, '*');
 			} else {
 				if (editor) {
 					editor.setOption("readonly", false);
@@ -306,7 +305,7 @@ function openGoogleChannel() {
 	
 	window.googleChannel.postMessage({
 		command: "authorize"
-	}, ORIGIN);
+	}, '*');
 }
 
 function bindKeys() {
