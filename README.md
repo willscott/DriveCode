@@ -24,6 +24,10 @@ Feel free to file Issues (or Pull Requests!) here, or interact with DriveCode on
    https://code.google.com/p/google-api-javascript-client/issues/detail?id=64
    https://plus.google.com/111745366298188139351/posts/HZVJavKywFX
 
-3. Keymaps.
+3. Preference Panel:
+	* Keymaps
+	* Tab preferences
+	* Keymaps
+	* Line Wrapping
 4. Localization.
 5. Onboarding Experience.
