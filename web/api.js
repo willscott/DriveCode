@@ -65,7 +65,7 @@ function upload(meta, file, s) {
 	const boundary = '-------314159265358979323846';
 	const delimiter = "\r\n--" + boundary + "\r\n";
 	const close_delim = "\r\n--" + boundary + "--";
-	var base64Data = btoa(file);
+	var base64Data = btoa(unescape(encodeURIComponent(file)));
 	var ctype = meta.mimeType;
 	var fileId = meta.id;
 	if (!fileId)
