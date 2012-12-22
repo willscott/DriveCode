@@ -8,6 +8,9 @@ window.addEventListener('load', function() {
 		if (event.source == window.googleChannel) {
 			window.topChannel.postMessage(event.data, '*');
 		} else {
+			if (!event.source) {
+				event.source.postMessage({"name":"open", "partner": "https://homes.cs.washington.edu/~wrs/drivecode/web.html"}, '*');
+			}
 			window.topChannel = event.source;
 			if (!window.googleChannel) {
 				window.googleChannel = function() {return event.data;};			
@@ -22,7 +25,7 @@ window.addEventListener('load', function() {
 
 function loadGoogleChannel() {
 	var el = document.createElement("iframe");
-	el.src = "https://homes.cs.washington.edu/~wrs/drivecode/api.html";
+	el.src = "https://homes.cs.washington.edu/~wrs/drivecode/sandbox.html";
 	el.style.position = "absolute";
 	el.style.left = "-100px";
 	el.style.width = "10px";

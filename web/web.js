@@ -3,30 +3,33 @@ var initialState = null;
 var CLIENT_ID = '1230779730-r091mnd3tvv89ecolu1mtlb34qomopri.apps.googleusercontent.com';
 var SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
-window.addEventListener('message', function(msg) {
-	var command = msg.data.command;
+function postMessage(msg) {
+	window.localStorage['message'] = msg;
+}
+
+window.addEventListener('storage', function(evt) {
+	var command = evt.newValue.command;
 	if (command == "authorize") {
-		var s = event.source;
 		var onSuccess = function(s) {
 			console.log("posting message");
-			s.postMessage({name: "ready"}, '*');
+			postMessage({name: "ready"}, '*');
 		};
-		checkAuth(onSuccess.bind(this, s));
+		checkAuth(onSuccess);
 	} else if (command == "open") {
-		var req = gapi.client.drive.files.get({'fileId': msg.data.id});
-		req.execute(function(s,resp) {
+		var req = gapi.client.drive.files.get({'fileId': evt.newValue.id});
+		req.execute(function(resp) {
 			console.log(resp);
 			if (!resp.error) {
-				s.postMessage({name: "meta", meta: resp}, '*');
-				download(resp.downloadUrl, s);
+				postMessage({name: "meta", meta: resp}, '*');
+				download(resp.downloadUrl);
 			}
-		}.bind(this, event.source));
+		});
 	} else if (command == "save") {
-		upload(msg.data.meta, msg.data.file, event.source);
+		upload(evt.newValue.meta, evt.newValue.file);
 	}
-});
+}, false);
 
-function insert(meta, base64Data, s) {
+function insert(meta, base64Data) {
 	const boundary = '-------314159265358979323846';
 	const delimiter = "\r\n--" + boundary + "\r\n";
 	const close_delim = "\r\n--" + boundary + "--";
@@ -53,15 +56,15 @@ function insert(meta, base64Data, s) {
 	        'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
 	      },
 	      'body': multipartRequestBody});
-	request.execute(function(s, resp) {
+	request.execute(function(resp) {
 		console.log(resp);
 		if (!resp.error) {
-			s.postMessage({name: "meta", meta: resp}, '*');
+			postMessage({name: "meta", meta: resp}, '*');
 		}
-	}.bind(this, s));
+	});
 }
 
-function upload(meta, file, s) {
+function upload(meta, file) {
 	const boundary = '-------314159265358979323846';
 	const delimiter = "\r\n--" + boundary + "\r\n";
 	const close_delim = "\r\n--" + boundary + "--";
@@ -69,7 +72,7 @@ function upload(meta, file, s) {
 	var ctype = meta.mimeType;
 	var fileId = meta.id;
 	if (!fileId)
-	return insert(meta, base64Data, s);
+	return insert(meta, base64Data);
 	var multipartRequestBody =
 	    delimiter +
 	        'Content-Type: application/json\r\n\r\n' +
@@ -88,12 +91,12 @@ function upload(meta, file, s) {
 	        'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
 	      },
 	      'body': multipartRequestBody});
-	request.execute(function(s, resp) {
+	request.execute(function(resp) {
 		console.log(resp);
 		if (!resp.error) {
-			s.postMessage({name: "meta", meta: resp}, '*');
+			postMessage({name: "meta", meta: resp}, '*');
 		}
-	}.bind(this, s));
+	});
 }
 
 function download(file, s) {

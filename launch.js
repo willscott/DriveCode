@@ -271,7 +271,7 @@ function loadGoogleChannel() {
 
 function openGoogleChannel() {
 	window.addEventListener('message', function(event) {
-		if (event.data.name == "ready") {
+		if (event.data.name == "ready") {			
 			if (initialState.action && initialState.action == "open") {
 				window.googleChannel.postMessage({command: "open", id:initialState.ids[0]}, '*');
 			} else {
@@ -284,6 +284,10 @@ function openGoogleChannel() {
 					activeMetaData.parents = [initialState.parentId];
 				}
 			}
+		} else if (event.data.name == "open") {
+			var wv = document.createElement("webview");
+			wv.src = event.data.partner;
+			document.body.appendChild(wv);
 		} else if (event.data.name == "meta") {
 			activeMetaData = event.data.meta;
 			if (editor) {
