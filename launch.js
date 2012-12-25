@@ -133,8 +133,8 @@ var mode_ext_map = {
 
 function setupMode() {
 	var mode = document.createElement("script");
-	CodeMirror.modeURL = "CodeMirror/mode/%N/%N.js";
-	mode.src = "CodeMirror/lib/util/loadmode.js";
+	CodeMirror.modeURL = "weborigin/CodeMirror/mode/%N/%N.js";
+	mode.src = "weborigin/CodeMirror/lib/util/loadmode.js";
 	mode.addEventListener('load', function() {
 		var select = document.getElementById("mode");
 		for (var type in mode_ext_map) {
@@ -253,7 +253,7 @@ function updateStatus(editor) {
 
 function loadCodeMirror(continuation) {
 	var el = document.createElement("script");
-	el.src = "CodeMirror/lib/codemirror.js";
+	el.src = "weborigin/CodeMirror/lib/codemirror.js";
 	el.addEventListener('load', continuation, true);
 	document.body.appendChild(el);
 }
