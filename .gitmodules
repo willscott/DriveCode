@@ -1,3 +1,4 @@
-[submodule "CodeMirror"]
-	path = CodeMirror
+	url = git://github.com/marijnh/CodeMirror.git
+[submodule "weborigin/CodeMirror"]
+	path = weborigin/CodeMirror
 	url = git://github.com/marijnh/CodeMirror.git
