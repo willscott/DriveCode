@@ -2,7 +2,12 @@
 <html manifest="manifest.appcache">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>DriveCode -- Open</title>
+    <title>DriveCode -- Create</title>
+    <script type="text/javascript">
+    var appHome = "http://quimian.com/drivecode/launch.html";
+    var query = window.location.search;
+    window.location.href = appHome + query;
+    </script>
     <style type="text/css" media="screen">
         body {margin:0px; padding:0px; text-align:center;}
         .content {

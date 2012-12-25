@@ -1,9 +1,12 @@
 var initialState = null;
-
+var WEBORIGIN = "http://quimian.com";
 var CLIENT_ID = '1230779730-r091mnd3tvv89ecolu1mtlb34qomopri.apps.googleusercontent.com';
 var SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
 window.addEventListener('message', function(msg) {
+	if (msg.origin != WEBORIGIN) {
+		return;
+	}
 	var command = msg.data.command;
 	if (command == "authorize") {
 		var s = event.source;

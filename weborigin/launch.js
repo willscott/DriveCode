@@ -1,4 +1,4 @@
-var ORIGIN = "https://homes.cs.washington.edu";
+var DRIVEORIGIN = "https://homes.cs.washington.edu";
 var initialState = {};
 var editor = null;
 var activeMetaData = {
@@ -43,32 +43,34 @@ window.addEventListener('load', function() {
 }, true);
 
 function setupTheme() {
-	var tVal = chrome.storage.sync.get(["theme", "tabs"], function(r) {
+	  //var tVal = chrome.storage.sync.get(["theme", "tabs"], function(r) {
 		//Theme
 		var el = document.getElementById("theme");
-		var val = r["theme"] || "default";
+		var val = localStorage["theme"] || "default";
 		el.value = val;
 		el.addEventListener('change', function() {
 			var newVal = theme.options[theme.selectedIndex].innerHTML;
 			editor.setOption("theme", newVal);
 			document.getElementById("header").className = "cm-s-" + newVal;
-			chrome.storage.sync.set({"theme":newVal}, function() {});
+			//chrome.storage.sync.set({"theme":newVal}, function() {});
+			localStorage["theme"] = newVal;
 		}, true);
 		editor.setOption("theme", val);
 		document.getElementById("header").className = "cm-s-" + val;
 		
 		//tab settings
 		var tabel = document.getElementById("tabs");
-		var val = r["tabs"] || "t4";
+		var val = localStorage["tabs"] || "t4";
 		tabel.value = val;
 		tabel.addEventListener('change', function() {
-			chrome.storage.sync.set({"theme": tabel.value}, function() {});
+			//chrome.storage.sync.set({"theme": tabel.value}, function() {});
+			localStorage["tabs"] = tabel.value;
 			editor.setOption("tabSize", parseInt(tabel.value.split('')[1]));
 			editor.setOption("indentWithTabs", (tabel.value.split('')[0] == 't'));
 		});
 		editor.setOption("tabSize", parseInt(tabel.value.split('')[1]));
 		editor.setOption("indentWithTabs", (tabel.value.split('')[0] == 't'));
-	});
+		//});
 }
 
 var mode_alias_map = {
@@ -167,18 +169,19 @@ function updateMode(newMode) {
 
 function setupSave() {
 	document.getElementById("sdot").addEventListener('click', editorSave, true);
-	chrome.storage.sync.get("autosave", function(r) {
+	//chrome.storage.sync.get("autosave", function(r) {
 		var el = document.getElementById("autosave");
-		var val = r["autosave"] || false;
+		var val = localStorage["autosave"] || false;
 		autosave = val;
 		if (val) {
 			el.checked = true;
 		}
 		el.addEventListener('change', function() {
 			autosave = el.checked;
-			chrome.storage.sync.set({"autosave":el.checked}, function() {});
+			localStorage["autosave"] = el.checked;
+			//chrome.storage.sync.set({"autosave":el.checked}, function() {});
 		}, true);
-	});
+		//});
 
   // Unsaved warning.
 	window.addEventListener('beforeunload', function(e) {
@@ -214,7 +217,7 @@ function editorSave() {
 		command: "save",
 		meta: activeMetaData,
 		file: editor.getValue()
-	}, ORIGIN);
+	}, DRIVEORIGIN);
 }
 
 function setupTitle() {
@@ -274,7 +277,7 @@ function openGoogleChannel() {
 	window.addEventListener('message', function(event) {
 		if (event.data.name == "ready") {
 			if (initialState.action && initialState.action == "open") {
-				window.googleChannel.postMessage({command: "open", id:initialState.ids[0]}, ORIGIN);
+				window.googleChannel.postMessage({command: "open", id:initialState.ids[0]}, DRIVEORIGIN);
 			} else {
 				if (editor) {
 					editor.setOption("readonly", false);
@@ -306,7 +309,7 @@ function openGoogleChannel() {
 	
 	window.googleChannel.postMessage({
 		command: "authorize"
-	}, ORIGIN);
+	}, DRIVEORIGIN);
 }
 
 function bindKeys() {

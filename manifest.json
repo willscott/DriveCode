@@ -2,10 +2,9 @@
   "manifest_version": 2,
   "name": "__MSG_extName__",
   "description": "__MSG_extDesc__",
-  "version": "0.2.4",
+  "version": "0.3.1",
 	"container" : "GOOGLE_DRIVE",
 	"api_console_project_id" : "1230779730",
-  "content_security_policy": "default-src 'self'; img-src 'self' data:; frame-src 'self' https://homes.cs.washington.edu",
   "default_locale": "en",
 	"offline_enabled": false,
   "icons": {
@@ -13,19 +12,13 @@
 			"19": "images/mirror-19.png",
 			"16": "images/mirror-16.png"
   },
-  "web_accessible_resources": [],
 	"app": {
+		"urls": ["http://quimian.com/drivecode/"],
 		"launch": {
-			"local_path": "launch.html"
+			"web_url": "http://quimian.com/drivecode/launch.html"
 		}
 	},
 	"permissions": [
-		"https://homes.cs.washington.edu/",
-		"storage"
-	],
-	"content_scripts": [{
-		"matches": ["https://homes.cs.washington.edu/~wrs/drivecode/*"],
-		"js": ["redirector.js"],
-		"run_at": "document_start"
-	}]
+		"unlimitedStorage"
+	]
 }
