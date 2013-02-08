@@ -4,7 +4,7 @@
     "description": "Extension name."
   },
   "extDesc": {
-    "message": "Self Relient Text Editing for Drive.",
+    "message": "Self Reliant Text Editing for Drive.",
     "description": "Extension description."
 	},
 	"loadingMsg": {
@@ -17,6 +17,6 @@
 	},
 	"autosave": {
 		"message": "Autosave",
-		"description": "checkbox for configuring whether documents are automaticallhy saved."
+		"description": "checkbox for configuring whether documents are automatically saved."
 	}
 }
