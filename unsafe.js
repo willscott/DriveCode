@@ -10,7 +10,7 @@ window.addEventListener('message', function(event) {
     appOrigin = event.origin;
   }
   if (!event.data || !event.data.command) {
-    console.log(event);
+    //console.log(event);
     return;
   }
   switch (event.data.command) {
@@ -25,26 +25,40 @@ window.addEventListener('message', function(event) {
   
 });
 
+var authstate = 0;
 function checkAuth(continuation) {
-  if (typeof gapi === 'undefined') {
+  if (window.gapi == undefined && authstate < 1) {
+    authstate = 1;
+    console.log("loading GAPI");
     var script = document.createElement("script");
     script.src = "https://apis.google.com/js/client.js";
     script.addEventListener('load', checkAuth.bind(this, continuation), true);
     document.body.appendChild(script);
     return;
+  } else if (window.gapi.auth == undefined && authstate < 2) {
+    authstate = 2;
+    console.log("waiting for GAPI auth");
+    window.gapi.load("auth", checkAuth.bind(this, continuation));
+  } else if (authstate < 3){
+    authstate = 3;
+    console.log("waiting for GAPI authorization");
+    window.gapi.auth.authorize({
+      'client_id': CLIENT_ID,
+      'scope': SCOPE,
+      'immediate': true}, handleAuthResult.bind(this, continuation));
   }
-  gapi.auth.authorize({
-    'client_id': CLIENT_ID,
-    'scope': SCOPE,
-    'immediate': true}, handleAuthResult.bind(this, continuation));
 }
 
 function handleAuthResult(continuation, authResult) {
-  if (authResult) {
-    gapi.client.load('drive', 'v2', continuation);
-  } else {
+  if (authResult && authstate < 5) {
+    authstate = 5;
+    console.log("Successful Auth");
+    window.gapi.client.load('drive', 'v2', continuation);
+  } else if (authstate < 4) {
+    authstate = 4;
+    console.log("Unsuccessful Auth");
     // No access token could be retrieved, force the authorization flow.
-    gapi.auth.authorize({
+    window.gapi.auth.authorize({
       'client_id': CLIENT_ID,
       'scope': SCOPE,
       'immediate': false}, handleAuthResult.bind(this, continuation));

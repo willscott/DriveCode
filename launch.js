@@ -207,9 +207,11 @@ function loadGoogleChannel() {
     req.open("GET", "unsafe.js", true)
     req.onreadystatechange = function() {
       if(this.readyState == 4) {
+        var unsafe = btoa(this.responseText);
+        var bootloader = "var injected = injected || 0; if (!injected) {injected = 1; var e = document.createElement('script'); e.type='text/javascript'; e.appendChild(document.createTextNode(atob('" + unsafe + "'))); document.head.appendChild(e);}";
         // 3. Inject the script.
         el.executeScript({
-          code: this.responseText
+          code: bootloader
         },
         // 4. Open the channel to the google API.
         openGoogleChannel);
