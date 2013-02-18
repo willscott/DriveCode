@@ -1,43 +1,52 @@
-var ORIGIN = "https://homes.cs.washington.edu";
+var appWindow;
+var appOrigin;
 
-window.addEventListener('load', function() {
-	window.googleChannel = null;
-	window.topChannel = null;
+var CLIENT_ID = '403513397760-8f21lgjeku38tckvfjejjihrvqpg7ip2.apps.googleusercontent.com';
+var SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
-	window.addEventListener('message', function(event) {
-		if (event.source == window.googleChannel) {
-			window.topChannel.postMessage(event.data, '*');
-		} else {
-			if (!event.source) {
-				event.source.postMessage({"name":"open", "partner": "https://homes.cs.washington.edu/~wrs/drivecode/web.html"}, '*');
-			}
-			window.topChannel = event.source;
-			if (!window.googleChannel) {
-				window.googleChannel = function() {return event.data;};			
-			} else {
-				window.googleChannel.postMessage(event.data, /*ORIGIN*/'*');
-			}
-		}
-	});
-	
-	loadGoogleChannel();
-}, true);
+window.addEventListener('message', function(event) {
+  if (!appWindow) {
+    appWindow = event.source;
+    appOrigin = event.origin;
+  }
+  if (!event.data || !event.data.command) {
+    console.log(event);
+    return;
+  }
+  switch (event.data.command) {
+    case "authorize":
+      checkAuth(function() {
+        appWindow.postMessage({name: "ready"}, appOrigin);
+      });
+      break;
+    case "":
+    break;
+  }
+  
+});
 
-function loadGoogleChannel() {
-	var el = document.createElement("iframe");
-	el.src = "https://homes.cs.washington.edu/~wrs/drivecode/sandbox.html";
-	el.style.position = "absolute";
-	el.style.left = "-100px";
-	el.style.width = "10px";
-	document.body.appendChild(el);
-	el.addEventListener('load', function() {
-		var i = null
-		if (typeof window.googleChannel == "function") {
-			i = window.googleChannel();
-		}
-		window.googleChannel = el.contentWindow;
-		if (i) {
-			window.googleChannel.postMessage(i, /*ORIGIN*/'*');
-		}
-	}, true);
+function checkAuth(continuation) {
+  if (typeof gapi === 'undefined') {
+    var script = document.createElement("script");
+    script.src = "https://apis.google.com/js/client.js";
+    script.addEventListener('load', checkAuth.bind(this, continuation), true);
+    document.body.appendChild(script);
+    return;
+  }
+  gapi.auth.authorize({
+    'client_id': CLIENT_ID,
+    'scope': SCOPE,
+    'immediate': true}, handleAuthResult.bind(this, continuation));
+}
+
+function handleAuthResult(continuation, authResult) {
+  if (authResult) {
+    gapi.client.load('drive', 'v2', continuation);
+  } else {
+    // No access token could be retrieved, force the authorization flow.
+    gapi.auth.authorize({
+      'client_id': CLIENT_ID,
+      'scope': SCOPE,
+      'immediate': false}, handleAuthResult.bind(this, continuation));
+  }
 }

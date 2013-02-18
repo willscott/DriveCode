@@ -1,3 +1,6 @@
+var partner = "https://wills.co.tt/bitbucket/dc.html";
+var partnerOrigin = "https://wills.co.tt";
+
 var initialState = {};
 var editor = null;
 var activeMetaData = {
@@ -69,67 +72,6 @@ function setupTheme() {
 		editor.setOption("indentWithTabs", (tabel.value.split('')[0] == 't'));
 	});
 }
-
-var mode_alias_map = {
-	"clike": ["C / C++ / Java"],
-	"htmlmixed": ["HTML"],
-	"htmlembedded": ["JSP / C#"],
-	"stex": ["TeX"]
-};
-
-var mode_ext_map = {
-"clike": ["c", "cpp", "h", "hpp", "c++", "java", "m", "cs", "scala"],
-"clojure": ["clj"],
-"coffeescript": ["coffee"],
-"commonlisp": ["cl", "lisp"],
-"css": ["css"],
-"diff": ["diff","patch"],
-"ecl": ["ecl"],
-"erlang": ["erl"],
-"gfm": ["md"],
-"go": ["go"],
-"groovy": ["groovy"],
-"haskell": ["hs"],
-"haxe": ["hx"],
-"htmlembedded": ["jsp", "cs"],
-"htmlmixed": ["html"],
-"javascript": ["js", "json"],
-"jinja2": [],
-"less": ["less"],
-"lua": ["lua"],
-"markdown": ["md"],
-"mysql": ["sql"],
-"ntriples": ["nt"],
-"ocaml": ["ocaml"],
-"pascal": ["pas", "pascal"],
-"perl": ["pl", "pm"],
-"php":["php","phps"],
-"pig": ["pig"],
-"plsql":["sql"],
-"properties": ["plist"],
-"python":["py"],
-"r": ["r"],
-"rst": ["rst"],
-"ruby":["rb"],
-"rust": ["rust"],
-"scheme": ["ss","scm"],
-"shell":["sh","bash"],
-"sieve": ["sieve"],
-"smalltalk": ["st"],
-"smarty": ["tpl"],
-"sparql": ["rq"],
-"stex": ["tex"],
-"tiddlywiki": [],
-"tiki": [],
-"vb": ["vb"],
-"vbscript": ["vbs"],
-"velocity": ["vsl"],
-"verilog": ["v", "vh"],
-"xml": ["xml", "xslt"],
-"xquery": ["xquery"],
-"yaml": ["yaml"],
-"z80": ["z80"]
-};
 
 function setupMode() {
 	var mode = document.createElement("script");
@@ -251,21 +193,38 @@ function loadCodeMirror(continuation) {
 }
 
 function loadGoogleChannel() {
-	var el = document.createElement("iframe");
-	el.src = "unsafe.html";
+	var el = document.createElement("webview");
 	el.style.position = "absolute";
-	el.style.left = "-100px";
-	el.style.width = "10px";
+	el.style.top = "30px";
+	el.style.left = "30px";
+	el.style.width = "300px";
 	document.body.appendChild(el);
-	el.addEventListener('load', openGoogleChannel, true);
-	window.googleChannel = el.contentWindow;
+  // 1. Load the holding page.
+	el.setAttribute('src', partner);
+  el.addEventListener('loadstop', function() {
+    // 2. Request the script to inject.
+    var req = new XMLHttpRequest();
+    req.open("GET", "unsafe.js", true)
+    req.onreadystatechange = function() {
+      if(this.readyState == 4) {
+        // 3. Inject the script.
+        el.executeScript({
+          code: this.responseText
+        },
+        // 4. Open the channel to the google API.
+        openGoogleChannel);
+      }
+    }.bind(req);
+    req.send();
+    window.googleChannel = el.contentWindow;
+  }, true);
 }
 
 function openGoogleChannel() {
 	window.addEventListener('message', function(event) {
-		if (event.data.name == "ready") {			
+		if (event.data.name == "ready") {
 			if (initialState.action && initialState.action == "open") {
-				window.googleChannel.postMessage({command: "open", id:initialState.ids[0]}, '*');
+				window.googleChannel.postMessage({command: "open", id: initialState.ids[0]}, partnerOrigin);
 			} else {
 				if (editor) {
 					editor.setOption("readonly", false);
@@ -276,10 +235,6 @@ function openGoogleChannel() {
 					activeMetaData.parents = [initialState.parentId];
 				}
 			}
-		} else if (event.data.name == "open") {
-			var wv = document.createElement("webview");
-			wv.src = event.data.partner;
-			document.body.appendChild(wv);
 		} else if (event.data.name == "meta") {
 			activeMetaData = event.data.meta;
 			if (editor) {
@@ -301,7 +256,7 @@ function openGoogleChannel() {
 	
 	window.googleChannel.postMessage({
 		command: "authorize"
-	}, '*');
+	}, partnerOrigin);
 }
 
 function bindKeys() {

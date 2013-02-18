@@ -11,4 +11,3 @@ function launchWindow(launchData) {
 
 
 chrome.app.runtime.onLaunched.addListener(launchWindow);
-chrome.pushMessaging.onMessage.addListener(launchWindow);

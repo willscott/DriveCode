@@ -19,10 +19,8 @@
 		}
 	},
 	"permissions": [
-		"https://homes.cs.washington.edu/",
 		"storage",
-		"webview",
-		"pushMessaging"
+		"webview"
 	],
 	"sandbox": {
 	  "pages": ["unsafe.html"]
