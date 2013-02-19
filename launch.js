@@ -196,9 +196,10 @@ function loadCodeMirror(continuation) {
 function loadGoogleChannel() {
 	var el = document.createElement("webview");
 	el.style.position = "absolute";
-	el.style.top = "30px";
-	el.style.left = "30px";
-	el.style.width = "300px";
+	el.style.top = "0px";
+	el.style.right = "0px";
+	el.style.width = "80px";
+  el.style.height = "30px";
 	document.body.appendChild(el);
   // 1. Load the holding page.
 	el.setAttribute('src', partner);

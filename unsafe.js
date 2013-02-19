@@ -4,6 +4,7 @@ var appOrigin;
 var CLIENT_ID = '403513397760-8f21lgjeku38tckvfjejjihrvqpg7ip2.apps.googleusercontent.com';
 var SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
+// Override window.open to handle interactive auth requests.
 window.open = function(url) {
   appWindow.postMessage({name: "needauth", url: url}, appOrigin);
 }
@@ -19,6 +20,8 @@ window.addEventListener('message', function(event) {
   }
   switch (event.data.command) {
     case "authorize":
+      document.body.style.background = "green";
+      document.body.textContent = "Connected";
       checkAuth(function() {
         appWindow.postMessage({name: "ready"}, appOrigin);
       });
@@ -41,8 +44,8 @@ function checkAuth(continuation) {
     return;
   } else if (window.gapi.auth == undefined && authstate < 2) {
     authstate = 2;
-    console.log("waiting for GAPI auth");
-    window.gapi.load("auth", checkAuth.bind(this, continuation));
+    console.log("waiting for GAPI to initialize");
+    window.gapi.load("auth:client,drive-realtime,drive-share", checkAuth.bind(this, continuation));
   } else if (authstate < 3){
     authstate = 3;
     console.log("waiting for GAPI authorization");
@@ -56,11 +59,11 @@ function checkAuth(continuation) {
 function handleAuthResult(continuation, authResult) {
   if (authResult && authstate < 5) {
     authstate = 5;
-    console.log("Successful Auth");
+    console.log("Authorization complete. Loading drive.");
     window.gapi.client.load('drive', 'v2', continuation);
   } else if (authstate < 4) {
     authstate = 4;
-    console.log("Unsuccessful Auth");
+    console.log("Couldn't authorize automatically, beginning interactive authorization.");
     // No access token could be retrieved, force the authorization flow.
     window.gapi.auth.authorize({
       'client_id': CLIENT_ID,
