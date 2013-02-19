@@ -9,7 +9,8 @@ var activeMetaData = {
 var data = "";
 var dirty = false;
 var autosave = false;
-var autosaveTimeout = false
+var autosaveTimeout = false;
+var authWindow = null;
 
 window.addEventListener('load', function() {
 	var continuation = function() {
@@ -224,7 +225,18 @@ function loadGoogleChannel() {
 
 function openGoogleChannel() {
 	window.addEventListener('message', function(event) {
-		if (event.data.name == "ready") {
+    if (event.data.name == "needauth") {
+      if (!authWindow) {
+        authWindow = document.createElement("webview");
+        authWindow.style.position = "absolute";
+        authWindow.style.top = "0px";
+        authWindow.style.left = "300px";
+        authWindow.style.width = "300px";
+        authWindow.style.height = "500px";
+        document.body.appendChild(authWindow);
+        authWindow.setAttribute('src', event.data.url);
+      }
+    } else if (event.data.name == "ready") {
 			if (initialState.action && initialState.action == "open") {
 				window.googleChannel.postMessage({command: "open", id: initialState.ids[0]}, partnerOrigin);
 			} else {

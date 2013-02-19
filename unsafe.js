@@ -4,6 +4,10 @@ var appOrigin;
 var CLIENT_ID = '403513397760-8f21lgjeku38tckvfjejjihrvqpg7ip2.apps.googleusercontent.com';
 var SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
+window.open = function(url) {
+  appWindow.postMessage({name: "needauth", url: url}, appOrigin);
+}
+
 window.addEventListener('message', function(event) {
   if (!appWindow) {
     appWindow = event.source;
