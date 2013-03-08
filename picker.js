@@ -16,9 +16,13 @@ function createPicker() {
     document.body = document.createElement('body');
     setTimeout(function() {
       var view = new google.picker.View(google.picker.ViewId.DOCS);
-      view.setMimeTypes("text/plain,text/html,text/javascript");
+      var rpview = new google.picker.View(google.picker.ViewId.RECENTLY_PICKED);
+      var mimeTypes = "text/plain,text/html,text/javascript";
+      view.setMimeTypes(mimeTypes);
+      rpview.setMimeTypes(mimeTypes);
       window.picker = new google.picker.PickerBuilder().
         addView(view).
+        addView(rpview).
         addView(new google.picker.DocsUploadView()).
         setCallback(pickerCallback).
         build();
