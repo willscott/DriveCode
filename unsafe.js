@@ -21,12 +21,15 @@ window.addEventListener('message', function(event) {
   switch (event.data.command) {
     case "authorize":
       document.body.style.background = "green";
-      document.body.textContent = "Connected";
       checkAuth(function() {
         appWindow.postMessage({name: "ready"}, appOrigin);
       });
       break;
+    case "open":
+      
+      break;
     case "":
+    default:
     break;
   }
   

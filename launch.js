@@ -11,6 +11,7 @@ var dirty = false;
 var autosave = false;
 var autosaveTimeout = false;
 var authWindow = null;
+var pickerWindow = null;
 
 window.addEventListener('load', function() {
 	var continuation = function() {
@@ -161,6 +162,9 @@ function setupTitle() {
 			updateSave();
 		}
 	}, true);
+  
+  var open = document.getElementById("open-button");
+  open.addEventListener('click', openGooglePicker, true);
 }
 
 function updateTitle(newTitle) {
@@ -193,51 +197,70 @@ function loadCodeMirror(continuation) {
 	document.body.appendChild(el);
 }
 
-function loadGoogleChannel() {
-	var el = document.createElement("webview");
-	el.style.position = "absolute";
-	el.style.top = "0px";
-	el.style.right = "0px";
-	el.style.width = "80px";
-  el.style.height = "30px";
-	document.body.appendChild(el);
-  // 1. Load the holding page.
-	el.setAttribute('src', partner);
-  el.addEventListener('loadstop', function() {
-    // 2. Request the script to inject.
+function bootload(webview, script, callback) {
+  webview.addEventListener('loadstop', function() {
     var req = new XMLHttpRequest();
-    req.open("GET", "unsafe.js", true)
+    req.open("GET", script, true);
     req.onreadystatechange = function() {
-      if(this.readyState == 4) {
-        var unsafe = btoa(this.responseText);
-        var bootloader = "var injected = injected || 0; if (!injected) {injected = 1; var e = document.createElement('script'); e.type='text/javascript'; e.appendChild(document.createTextNode(atob('" + unsafe + "'))); document.head.appendChild(e);}";
-        // 3. Inject the script.
-        el.executeScript({
+      if (this.readyState == 4) {
+        var data = btoa(this.responseText);
+        var bootloader = "var injected = injected || 0; if (!injected) {injected = 1; var e = document.createElement('script'); e.type='text/javascript'; e.appendChild(document.createTextNode(atob('" + data + "'))); document.head.appendChild(e);}";
+        webview.executeScript({
           code: bootloader
-        },
-        // 4. Open the channel to the google API.
-        openGoogleChannel);
+        }, callback);
       }
     }.bind(req);
     req.send();
+  });
+}
+
+function loadGoogleChannel() {
+  var el = makeOverlay(partner);
+  el.style.left = "100%";
+  bootload(el, "unsafe.js", function() {
     window.googleChannel = el.contentWindow;
-  }, true);
+    openGoogleChannel();
+  });
+}
+
+function makeOverlay(src) {
+  var win = document.createElement("webview");
+  win.style.position = "absolute";
+  win.style.top = "0px";
+  win.style.left = "0px";
+  win.style.width = "100%";
+  win.style.height = "100%";
+  win.style.zIndex = "20";
+  win.setAttribute('src', src);
+  document.body.appendChild(win);
+  return win;
+}
+
+function closeGooglePicker(event) {
+  if (event.data.name == "picked") {
+    window.removeEventListener('message', closeGooglePicker);
+    document.body.removeChild(pickerWindow);
+    console.log(event.data);
+  }
+}
+
+function openGooglePicker() {
+  if (!pickerWindow) {
+    pickerWindow = makeOverlay(partner);
+  }
+  bootload(pickerWindow, "picker.js", function() {
+    window.addEventListener('message', closeGooglePicker);
+    pickerWindow.contentWindow.postMessage({command: "hello"}, partnerOrigin);
+  });
 }
 
 function openGoogleChannel() {
 	window.addEventListener('message', function(event) {
-    if (event.data.name == "needauth") {
-      if (!authWindow) {
-        authWindow = document.createElement("webview");
-        authWindow.style.position = "absolute";
-        authWindow.style.top = "0px";
-        authWindow.style.left = "300px";
-        authWindow.style.width = "300px";
-        authWindow.style.height = "500px";
-        document.body.appendChild(authWindow);
-        authWindow.setAttribute('src', event.data.url);
-      }
-    } else if (event.data.name == "ready") {
+		if (event.data.name == "needauth") {
+			if (!authWindow) {
+				authWindow = makeOverlay(event.data.url);
+			}
+		} else if (event.data.name == "ready") {
 			if (initialState.action && initialState.action == "open") {
 				window.googleChannel.postMessage({command: "open", id: initialState.ids[0]}, partnerOrigin);
 			} else {
