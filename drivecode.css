@@ -28,6 +28,11 @@ body {
 	border: 0;
 }
 
+#open-button {
+ float: right;
+ margin-right: 50px; 
+}
+
 #editor {
 	height: 100%;
 }

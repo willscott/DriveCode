@@ -78,7 +78,7 @@ function setupTheme() {
 function setupMode() {
 	var mode = document.createElement("script");
 	CodeMirror.modeURL = "weborigin/CodeMirror/mode/%N/%N.js";
-	mode.src = "weborigin/CodeMirror/lib/util/loadmode.js";
+	mode.src = "weborigin/CodeMirror/addon/mode/loadmode.js";
 	mode.addEventListener('load', function() {
 		var select = document.getElementById("mode");
 		for (var type in mode_ext_map) {
@@ -184,6 +184,7 @@ function updateTitle(newTitle) {
 }
 
 function updateStatus(editor) {
+  console.log("oncursoractivity");
 	var coords = editor.cursorCoords(true, "page");
 	var pos = editor.coordsChar(coords);
 	var string = "Line: " + (pos.line + 1) + " Column: " + (pos.ch + 1);
