@@ -240,6 +240,7 @@ function closeGooglePicker(event) {
   if (event.data.name == "picked") {
     window.removeEventListener('message', closeGooglePicker);
     document.body.removeChild(pickerWindow);
+    pickerWindow = false;
     console.log(event.data);
   }
 }
