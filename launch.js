@@ -1,5 +1,6 @@
 var partner = "https://wills.co.tt/bitbucket/dc.html";
 var partnerOrigin = "https://wills.co.tt";
+var debug = true;
 
 var initialState = {};
 var editor = null;
@@ -217,7 +218,13 @@ function bootload(webview, script, callback) {
 
 function loadGoogleChannel() {
   var el = makeOverlay(partner);
-  el.style.left = "100%";
+  if (!debug) {
+    el.style.left = "100%";
+  } else {
+    el.style.left = "50%";
+    el.style.width = "100px";
+    el.style.height = "25px";
+  }
   bootload(el, "unsafe.js", function() {
     window.googleChannel = el.contentWindow;
     openGoogleChannel();
@@ -242,7 +249,7 @@ function closeGooglePicker(event) {
     window.removeEventListener('message', closeGooglePicker);
     document.body.removeChild(pickerWindow);
     pickerWindow = false;
-    console.log(event.data);
+    window.googleChannel.postMessage({command: "open", id: event.data.id}, partnerOrigin);
   }
 }
 
