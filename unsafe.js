@@ -7,7 +7,7 @@ var CLIENT_ID = '403513397760-8f21lgjeku38tckvfjejjihrvqpg7ip2.apps.googleuserco
 var API_KEY = 'AIzaSyAp_Tqs6sEQaCfC_5n3RBi7WgW6zRD-UhE';
 var SCOPE = [
   'https://www.googleapis.com/auth/drive.install',
-  'https://www.googleapis.com/auth/drive.file'
+  'https://www.googleapis.com/auth/drive'
 ];
 
 // Override window.open to handle interactive auth requests.
@@ -28,7 +28,7 @@ window.addEventListener('message', function(event) {
     case "authorize":
       document.body.style.background = "green";
       checkAuth(function() {
-//        gapi.drive.realtime.setServerAddress('https://docs.google.com/otservice/');
+        gapi.drive.realtime.setServerAddress('https://docs.google.com/otservice/');
         appWindow.postMessage({name: "ready"}, appOrigin);
       });
       break;
