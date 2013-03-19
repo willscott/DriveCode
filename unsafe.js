@@ -60,20 +60,22 @@ function onErr(a) {
 
 function modelNeeded(id, model) {
   console.log("model needed.");
-  console.log(model);
   var string = model.createString('hello world');
-  model.getRoot().put('text', string);
+  window.x = model;
+  console.log(model.getRoot()); //.put('text', string);
 }
 
 function onloaded(id, file) {
   console.log("on Loaded");
   activeFiles[id] = file;
-  file.addCollaboratorJoinedListener(onPeopleChange.bind(this, id));
-  file.addCollaboratorLeftListener(onPeopleChange.bind(this, id));
-  file.addEventListener(gapi.drive.realtime.EventType.TEXT_INSERTED, function() {
+  var model = file.getModel();
+  window.x = model;
+  model.addCollaboratorJoinedListener(onPeopleChange.bind(this, id));
+  model.addCollaboratorLeftListener(onPeopleChange.bind(this, id));
+  model.addEventListener(gapi.drive.realtime.EventType.TEXT_INSERTED, function() {
     console.log('ti');
   });
-  file.addEventListener(gapi.drive.realtime.EventType.TEXT_DELETED, function() {
+  model.addEventListener(gapi.drive.realtime.EventType.TEXT_DELETED, function() {
     console.log('td');
   });
   onPeopleChange(id);
